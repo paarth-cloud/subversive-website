@@ -34,24 +34,14 @@
     />
     <meta name="twitter:image" content="https://aisubversive.com/og-image.jpg" />
 
-    <!-- Hero poster: shown under the WebGL brain until the scene is ready. -->
+    <!-- Hero poster: fills the brain's stage until the WebGL scene is ready. -->
     <link
       rel="preload"
       as="image"
       type="image/avif"
       fetchpriority="high"
-      media="(min-width: 768px)"
-      imagesrcset="/media/stage-1-1600.avif 1600w, /media/stage-1-2400.avif 2400w, /media/stage-1-3200.avif 3200w"
-      imagesizes="100vw"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/avif"
-      fetchpriority="high"
-      media="(max-width: 767px)"
       imagesrcset="/media/hero-square-720.avif 720w, /media/hero-square-1200.avif 1200w"
-      imagesizes="100vw"
+      imagesizes="(min-width: 1024px) 40vw, 90vw"
     />
 
     <script type="application/ld+json">

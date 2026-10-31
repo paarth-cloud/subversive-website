@@ -53,6 +53,8 @@ Every visible string, including the legal entity name, lives in `src/content/sit
 
 The brain's journey is one list of stops in `src/webgl/choreography.ts`, each tied to a `data-scene` anchor in the page. Every property (morph, position, scale, spin, opacity, energy) follows a smooth monotone curve through the stops that name it, so the brain never parks between sections and its transformation only moves forward. To change where something happens, move the anchor or the stop's `at` value. The curves rebuild on every layout change.
 
+The brain never sits on text because each section reserves an empty **stage** for it in its own layout: a `data-stage` box, framed by the `StageHud` instrument overlay. A stop that names a stage fits the brain into that box at whatever screen size the visitor has (`src/webgl/stage.ts` does the maths), `zoom` scales it within the box, and stages inside a pinned frame (`data-pin`) are measured where they hold still. Two stops on the same stage make the brain ride along with it, and `only` limits a stop to desktop or mobile. To move the brain somewhere new, move or resize its stage in the section's markup; the choreography follows.
+
 ## Project structure
 
 ```

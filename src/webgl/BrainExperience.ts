@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import type { QualityTier } from '../lib/device'
 import { sceneState } from './sceneStore'
+import { HALF_HEIGHT, baseScale } from './stage'
 import { createVoxelBrain, type VoxelBrain } from './voxelBrain'
 import { linkFragment, linkVertex, voxelEdgeFragment, voxelSolidFragment, voxelVertex } from './shaders'
 
@@ -31,11 +32,6 @@ const GLOW_BASE = {
 const GLOW_PREMULTIPLIED = { ...GLOW_BASE, blendSrc: THREE.OneFactor } as const
 /** For three's sprite shader, which outputs straight colour plus alpha. */
 const GLOW_STRAIGHT = { ...GLOW_BASE, blendSrc: THREE.SrcAlphaFactor } as const
-
-/** World units visible above and below the centre of the screen. */
-const HALF_HEIGHT = 2.05
-/** On-screen footprint of the brain at scale 1, in world units. */
-const FOOTPRINT = { width: 2.7, height: 2.6 }
 
 const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
@@ -332,7 +328,7 @@ export class BrainExperience {
     const aspect = width / height
     this.halfH = HALF_HEIGHT
     this.halfW = HALF_HEIGHT * aspect
-    this.baseScale = Math.min(1, (this.halfW * 2 * 0.86) / FOOTPRINT.width, (this.halfH * 2 * 0.72) / FOOTPRINT.height)
+    this.baseScale = baseScale(width, height)
     this.uniforms.uAspect.value = aspect
   }
 

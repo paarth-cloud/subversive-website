@@ -3,6 +3,7 @@ import { Aurora } from './components/layout/Aurora'
 import { Footer } from './components/layout/Footer'
 import { Grain } from './components/layout/Grain'
 import { Nav } from './components/layout/Nav'
+import { ScrollRail } from './components/layout/ScrollRail'
 import { BrainCanvas } from './webgl/BrainCanvas'
 import { Hero } from './sections/Hero'
 import { ProofRail } from './sections/ProofRail'
@@ -27,6 +28,7 @@ export function App() {
       <Aurora />
       <BrainCanvas />
       <Nav />
+      <ScrollRail />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <ProofRail />

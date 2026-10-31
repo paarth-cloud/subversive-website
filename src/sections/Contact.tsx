@@ -3,14 +3,24 @@ import { site } from '../content/site'
 import { ContactForm } from '../features/contact/ContactForm'
 import { Reveal } from '../components/ui/Reveal'
 import { SplitReveal } from '../components/ui/SplitReveal'
+import { StageHud } from '../components/ui/StageHud'
 
 const STEP_ICONS: Icon[] = [PaperPlaneTiltIcon, EnvelopeSimpleIcon, SparkleIcon]
 
-/** The final call to action. The brain is a superintelligent core behind the form. */
+/**
+ * The final call to action. The brain, now a superintelligent core, rises onto
+ * a finale stage above the form and leaves with it as the form arrives.
+ */
 export function Contact() {
   const { contact } = site
   return (
-    <section id="contact" data-scene="contact" aria-labelledby="contact-title" className="relative z-[2] py-32 md:py-44">
+    <section id="contact" data-scene="contact" aria-labelledby="contact-title" className="relative z-[2] py-32 md:py-40">
+      <div className="container-page">
+        <div className="relative mx-auto mb-16 aspect-[4/3] w-full max-w-[30rem] md:mb-20 lg:aspect-[16/9] lg:max-w-[46rem]">
+          <StageHud label="Ready for your brief" glow="cool" />
+          <div data-stage="contact" className="absolute inset-[6%]" />
+        </div>
+      </div>
       <div className="container-page grid gap-16 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
           <p className="eyebrow">{contact.eyebrow}</p>

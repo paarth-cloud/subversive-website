@@ -9,19 +9,24 @@ import { EASE_OUT } from '../lib/motion'
 import { cn } from '../lib/cn'
 import { Reveal } from '../components/ui/Reveal'
 import { SplitReveal } from '../components/ui/SplitReveal'
+import { StageHud } from '../components/ui/StageHud'
 
-/** Where each floating panel sits around the brain on desktop, and how deep. */
+/**
+ * Where each floating panel sits around the brain's stage on desktop, and how
+ * deep. The side columns and the bottom row stay clear of the stage itself.
+ */
 const PLACEMENT = [
-  { className: 'lg:left-0 lg:top-[3%]', depth: 0.7, float: 0 },
-  { className: 'lg:right-0 lg:top-[12%]', depth: 1.15, float: -2.6 },
-  { className: 'lg:left-[4%] lg:top-[54%]', depth: 0.95, float: -4.1 },
-  { className: 'lg:right-[5%] lg:top-[60%]', depth: 0.55, float: -1.3 },
-  { className: 'lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2', depth: 1.3, float: -5.4 },
+  { className: 'lg:left-0 lg:top-[2%]', depth: 0.7, float: 0 },
+  { className: 'lg:right-0 lg:top-[10%]', depth: 1.15, float: -2.6 },
+  { className: 'lg:left-[3%] lg:top-[50%]', depth: 0.95, float: -4.1 },
+  { className: 'lg:right-[4%] lg:top-[57%]', depth: 0.55, float: -1.3 },
+  { className: 'lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2', depth: 0.45, float: -5.4 },
 ] as const
 
 /**
  * Built to order. A floating UI system of example agents orbits the brain (now
- * a brain of light) at different depths, then the capability tags cascade in.
+ * a brain of light, on a stage at the centre of the field) at different
+ * depths, then the capability tags cascade in.
  */
 export function Capabilities() {
   const { build } = site
@@ -59,12 +64,24 @@ export function Capabilities() {
           <p className="mt-6 max-w-[34rem] text-lead text-ink-2">{build.body}</p>
         </Reveal>
 
-        <div ref={fieldRef} data-scene="build" className="relative mt-16 lg:mt-6 lg:h-[50rem]">
+        <div ref={fieldRef} data-scene="build" className="relative mt-14 lg:mt-6 lg:h-[56rem]">
+          <div className="relative mx-auto mb-14 aspect-[5/4] w-full max-w-[26rem] lg:hidden">
+            <StageHud label="Core · online" />
+            <div data-stage="build-mobile" className="absolute inset-[6%]" />
+          </div>
+          <div className="pointer-events-none absolute left-1/2 top-[42%] hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 lg:block">
+            <StageHud label="Core · online" />
+            <div data-stage="build" className="absolute inset-[6%]" />
+          </div>
           <ul aria-label={build.examplesLabel} className="grid gap-4 sm:grid-cols-2 lg:block">
             {build.examples.map((example, i) => {
               const place = PLACEMENT[i % PLACEMENT.length]!
               return (
-                <li key={example.title} data-depth={place.depth} className={cn('lg:absolute lg:w-[19.5rem]', place.className)}>
+                <li
+                  key={example.title}
+                  data-depth={place.depth}
+                  className={cn('lg:absolute lg:w-[17rem] xl:w-[19.5rem]', place.className)}
+                >
                   <Reveal delay={i * 0.06}>
                     <article
                       className="glass rounded-panel p-6 lg:animate-float"

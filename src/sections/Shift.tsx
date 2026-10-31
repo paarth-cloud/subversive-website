@@ -8,6 +8,7 @@ import { prefersReducedData } from '../lib/device'
 import { cn } from '../lib/cn'
 import { useSceneStatus } from '../webgl/sceneStore'
 import { Picture } from '../components/ui/Picture'
+import { StageHud } from '../components/ui/StageHud'
 
 const STAGES: MediaName[] = ['stage-1', 'stage-2', 'stage-3', 'stage-4']
 
@@ -78,9 +79,13 @@ export function Shift() {
           { autoAlpha: 1, yPercent: 0, filter: 'blur(0px)', duration: 0.34, ease: 'power3.out' },
           at + 0.04,
         )
-        if (i < beats.length - 1) {
-          tl.to(beat, { autoAlpha: 0, yPercent: -45, filter: 'blur(12px)', duration: 0.3, ease: 'power3.in' }, at + 0.8)
-        }
+        // The last beat holds until the pin is about to release, then clears the way.
+        const last = i === beats.length - 1
+        tl.to(
+          beat,
+          { autoAlpha: 0, yPercent: -45, filter: 'blur(12px)', duration: last ? 0.2 : 0.3, ease: 'power3.in' },
+          last ? TIMELINE_UNITS - 0.2 : at + 0.8,
+        )
       })
       tl.set({}, {}, TIMELINE_UNITS)
       return () => {
@@ -147,7 +152,7 @@ export function Shift() {
 
   if (reduced) {
     return (
-      <section data-scene="shift" aria-label={site.shift.label} className="relative z-[2] py-28 md:py-40">
+      <section id="shift" data-scene="shift" aria-label={site.shift.label} className="relative z-[2] py-28 md:py-40">
         <div className="container-page grid items-center gap-12 lg:grid-cols-12">
           <ul className="space-y-5 lg:col-span-5">
             {site.shift.beats.map((beat, i) => (
@@ -167,14 +172,20 @@ export function Shift() {
   }
 
   return (
-    <section ref={ref} data-scene="shift" aria-label={site.shift.label} className="relative z-[2] h-[420vh]">
+    <section ref={ref} id="shift" data-scene="shift" aria-label={site.shift.label} className="relative z-[2] h-[420vh]">
       <ul className="sr-only">
         {site.shift.beats.map((beat) => (
           <li key={beat}>{beat}</li>
         ))}
       </ul>
 
-      <div className="sticky top-0 h-[100dvh] overflow-hidden">
+      <div data-pin className="sticky top-0 h-[100dvh] overflow-hidden">
+        {!film && (
+          <div className="absolute left-[7%] top-[11%] h-[40%] w-[86%] lg:left-[48%] lg:top-[12%] lg:h-[76%] lg:w-[46%]">
+            <StageHud label="Transformation" />
+            <div data-stage="shift" className="absolute inset-[6%]" />
+          </div>
+        )}
         {film && (
           <>
             <div data-stack className="absolute inset-0 will-change-transform">

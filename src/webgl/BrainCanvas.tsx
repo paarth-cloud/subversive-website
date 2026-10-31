@@ -68,7 +68,7 @@ export function BrainCanvas() {
   }, [])
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[1]">
+    <div aria-hidden data-brain-viewport className="pointer-events-none fixed inset-0 z-[1]">
       <canvas ref={canvasRef} className="block h-full w-full" />
     </div>
   )

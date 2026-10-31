@@ -8,15 +8,17 @@ import { cn } from '../lib/cn'
 import { AgentTrace } from '../components/ui/AgentTrace'
 import { Reveal } from '../components/ui/Reveal'
 import { SplitReveal } from '../components/ui/SplitReveal'
+import { StageHud } from '../components/ui/StageHud'
 
 /**
- * Listen, Decide, Act. The chapters scroll on the left while the fixed WebGL
- * brain on the right, digitised during the Shift, unfolds into stacked neural
- * layers and reassembles as a brain of light (each chapter is a `data-scene`
- * anchor).
+ * Listen, Decide, Act. The chapters scroll while the brain, digitised during
+ * the Shift, holds a pinned stage (beside them on desktop, above them on
+ * phones), unfolds into stacked neural layers and reassembles as a brain of
+ * light (each chapter is a `data-scene` anchor).
  */
 export function HowItWorks() {
   const { how } = site
+  const sectionRef = useRef<HTMLElement>(null)
   const listRef = useRef<HTMLOListElement>(null)
   const reduced = usePrefersReducedMotion()
   const [active, setActive] = useState(0)
@@ -47,10 +49,46 @@ export function HowItWorks() {
     { scope: listRef, dependencies: [reduced] },
   )
 
+  // On phones the brain's stage is a band at the top of the screen: copy fades
+  // out as it scrolls up toward it, so the two never share the same pixels.
+  useGSAP(
+    () => {
+      if (reduced) return
+      const mm = gsap.matchMedia()
+      mm.add('(max-width: 1023px)', () => {
+        gsap.utils.toArray<HTMLElement>('[data-fade]', sectionRef.current).forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 1 },
+            { opacity: 0, ease: 'none', scrollTrigger: { trigger: el, start: 'top 42%', end: 'top 16%', scrub: true } },
+          )
+        })
+      })
+      return () => mm.revert()
+    },
+    { scope: sectionRef, dependencies: [reduced] },
+  )
+
   return (
-    <section id="how-it-works" aria-labelledby="how-title" className="relative z-[2] pt-32 md:pt-44">
+    <section
+      ref={sectionRef}
+      id="how-it-works"
+      aria-labelledby="how-title"
+      className="relative z-[2] overflow-clip pt-32 md:pt-44"
+    >
+      {/* The brain's stage, pinned while the chapters scroll: beside them on desktop, above them on
+          phones. The section clips it, so it leaves with the last chapter. */}
+      <div data-pin className="pointer-events-none sticky top-0 h-0">
+        <div className="container-page relative">
+          <div className="absolute inset-x-[12%] top-[9svh] h-[25svh] lg:left-[55%] lg:right-[var(--gutter)] lg:top-[13svh] lg:h-[74svh]">
+            <StageHud label="Agent loop" />
+            <div data-stage="how" className="absolute inset-[5%]" />
+          </div>
+        </div>
+      </div>
+
       <div className="container-page">
-        <div data-scene="how" className="max-w-3xl">
+        <div data-scene="how" data-fade className="max-w-3xl lg:max-w-[50%]">
           <p className="eyebrow">{how.eyebrow}</p>
           <SplitReveal as="h2" id="how-title" text={how.title} className="mt-6 text-display font-medium" />
           <Reveal>
@@ -71,30 +109,37 @@ export function HowItWorks() {
                   key={step.id}
                   data-chapter
                   data-scene={step.id}
-                  className="relative flex min-h-[88vh] flex-col justify-center py-16 pl-9 md:pl-14"
+                  className="relative flex min-h-[100svh] flex-col justify-end pb-[9svh] pl-9 pt-16 md:pl-14 lg:min-h-[88vh] lg:justify-center lg:py-16"
                 >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      'absolute left-0 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-500',
-                      isActive
-                        ? 'scale-125 border-signal bg-signal shadow-[0_0_22px_rgb(232_25_44/0.8)]'
-                        : 'border-line-2 bg-void',
-                    )}
-                  />
-                  <h3>
+                  <div data-fade className="relative">
                     <span
+                      aria-hidden
                       className={cn(
-                        'block text-[clamp(3.75rem,9vw,8.5rem)] font-medium leading-[0.88] tracking-[-0.065em] transition-colors duration-700 ease-ui',
-                        isActive ? 'text-ink' : 'text-ink/20',
+                        'absolute -left-9 top-[0.45em] size-2.5 -translate-x-1/2 rounded-full border text-[clamp(3.75rem,9vw,8.5rem)] transition-all duration-500 md:-left-14',
+                        isActive
+                          ? 'scale-125 border-signal bg-signal shadow-[0_0_22px_rgb(232_25_44/0.8)]'
+                          : 'border-line-2 bg-void',
                       )}
-                    >
-                      {step.verb}
-                    </span>
-                    <span className="mt-6 block text-title font-medium">{step.title}</span>
-                  </h3>
-                  <p className="mt-4 max-w-[30rem] text-lead text-ink-2">{step.body}</p>
-                  <AgentTrace label={how.traceLabel} lines={step.trace} active={isActive} className="mt-10 max-w-[25rem]" />
+                    />
+                    <h3>
+                      <span
+                        className={cn(
+                          'block text-[clamp(3.75rem,9vw,8.5rem)] font-medium leading-[0.88] tracking-[-0.065em] transition-colors duration-700 ease-ui',
+                          isActive ? 'text-ink' : 'text-ink/20',
+                        )}
+                      >
+                        {step.verb}
+                      </span>
+                      <span className="mt-6 block text-title font-medium">{step.title}</span>
+                    </h3>
+                    <p className="mt-4 max-w-[30rem] text-lead text-ink-2">{step.body}</p>
+                    <AgentTrace
+                      label={how.traceLabel}
+                      lines={step.trace}
+                      active={isActive}
+                      className="mt-10 hidden max-w-[25rem] md:block"
+                    />
+                  </div>
                 </li>
               )
             })}
