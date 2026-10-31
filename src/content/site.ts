@@ -38,12 +38,14 @@ export type IndustryIcon =
 
 export type FaqItem = { q: string; a: string }
 
+/** The one inbox the site sends people to. */
+const EMAIL = 'paarth@aisubversive.com'
+
 export const site = {
   name: 'Subversive',
   /** The legal entity behind the Subversive brand. */
   legalName: 'Vantum Business Solutions LLP',
-  email: 'hello@subversive.ai',
-  pressEmail: 'press@subversive.ai',
+  email: EMAIL,
 
   nav: [
     { label: 'How it works', href: '#how-it-works' },
@@ -293,7 +295,7 @@ export const site = {
         messageRequired: 'A sentence or two is enough to get started.',
         messageShort: 'Add a little more detail so we can prepare.',
         summary: 'Please fix the highlighted fields.',
-        network: `Something went wrong sending your brief. Try again, or email hello@subversive.ai.`,
+        network: `Something went wrong sending your brief. Try again, or email ${EMAIL}.`,
       },
       hints: {
         freeEmail: 'A work email helps us prepare for your company.',

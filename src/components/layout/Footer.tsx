@@ -41,10 +41,6 @@ export function Footer() {
           <a href={`mailto:${site.email}`} className="block text-lg text-ink transition-colors hover:text-signal-soft">
             {site.email}
           </a>
-          <p className="pt-3 text-ink-3">Press</p>
-          <a href={`mailto:${site.pressEmail}`} className="block text-ink-2 transition-colors hover:text-ink">
-            {site.pressEmail}
-          </a>
         </div>
       </div>
 
