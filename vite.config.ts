@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 function siteUrl(url: string | undefined): Plugin {
   return {
     name: 'site-url',
-    transformIndexHtml: (html) => (url ? html.replaceAll('https://subversive.ai', url.replace(/\/+$/, '')) : html),
+    transformIndexHtml: (html) => (url ? html.replaceAll('https://aisubversive.com', url.replace(/\/+$/, '')) : html),
   }
 }
 

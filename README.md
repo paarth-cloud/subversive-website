@@ -115,7 +115,7 @@ The build is a static site, set up for Cloudflare Pages built from GitHub. It al
 5. Deploy. Every push to the production branch (`main`) redeploys the live site; other branches get preview URLs.
 6. Custom domain: the project's **Custom domains** tab, then **Set up a domain**.
 
-`public/_headers` caches the content-hashed files in `/assets` for a year, and the media and brain model for a week. Canonical, Open Graph and JSON-LD URLs come from `VITE_SITE_URL` (default `https://subversive.ai`).
+`public/_headers` caches the content-hashed files in `/assets` for a year, and the media and brain model for a week. Canonical, Open Graph and JSON-LD URLs come from `VITE_SITE_URL` (default `https://aisubversive.com`).
 
 ## Behaviour by device
 
